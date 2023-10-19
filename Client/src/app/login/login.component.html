@@ -1,0 +1,22 @@
+<p>Please enter your email and password</p>
+<form [formGroup]="loginForm" id="msform" autocomplete="off">
+    <div>
+        <app-text-input [formControl]="$any(loginForm.controls['email'])" [label]="'Email'" [type]="'email'"></app-text-input>
+    </div>
+    <div>
+        <app-text-input [formControl]="$any(loginForm.controls['password'])" [label]="'Password'" [type]="'password'"></app-text-input>
+    </div>
+    <button type="submit" (click)="submit()">Sign In</button>
+</form>
+<p>Form value: {{loginForm.value | json}}</p>
+<p>Form status: {{loginForm.status | json}}</p>
+
+<button type="submit" (click)="showUsers()">Show Users</button>
+
+<div>
+    <ul>
+        <li *ngFor="let member of members">
+            {{member.id}} - {{member.userName}} - {{member.email}} - {{member.firstName}} - {{member.lastName}} - {{member.role}}
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,16 @@
+<div class="form-floating text-white">
+    <input class="form-control"
+        id="floating"
+        type={{type}}
+        [class.is-invalid]="control.touched && ngControl.invalid"
+        [class.is_valid]="control.valid"
+        [formControl]="control"
+        placeholder={{label}}>
+    <!--<label for="floating">{{label}}</label>-->
+    <div class="invalid-feedback" *ngIf="control.errors?.['required']"></div>
+    <div class="invalid-feedback" *ngIf="control.errors?.['minlength']">{{label}} must be at least {{control.errors?.['minlength'].requiredLength}} characters.</div>
+    <div class="invalid-feedback" *ngIf="control.errors?.['maxlength']">{{label}} must be at most {{control.errors?.['maxlength'].requiredLength}} characters.</div>
+    <div class="invalid-feedback" *ngIf="control.errors?.['alphanumeric']">{{label}} must have upper, lower character and number.</div>
+    <div class="invalid-feedback" *ngIf="control.errors?.['email']">Please enter a valid email.</div>
+    <div class="invalid-feedback" *ngIf="control.errors?.['notmatching']">Passwords have to match.</div>
+</div>

@@ -1,0 +1,45 @@
+<p>Please fill up the following form</p>
+<form [formGroup]="registerForm" id="msform" autocomplete="off">
+    <div>
+        <app-text-input [formControl]="$any(registerForm.controls['email'])" [label]="'Email'" [type]="'email'"></app-text-input>
+    </div>
+    <div>
+        <app-text-input [formControl]="$any(registerForm.controls['username'])" [label]="'Username'"></app-text-input>
+    </div>
+    <div>
+        <app-text-input [formControl]="$any(registerForm.controls['password'])" [label]="'Password'" [type]="'password'"></app-text-input>
+    </div>
+    <div>
+        <app-text-input [formControl]="$any(registerForm.controls['confirmPassword'])" [label]="'Confirm Password'" [type]="'password'"></app-text-input>
+    </div>
+    <div>
+        <app-text-input [formControl]="$any(registerForm.controls['firstname'])" [label]="'First Name'"></app-text-input>
+    </div>
+    <div>
+        <app-text-input [formControl]="$any(registerForm.controls['lastname'])" [label]="'Last Name'"></app-text-input>
+    </div>
+    <div>
+        <select id="genderSelect" formControlName="gender">
+            <option selected>Male</option>
+            <option>Female</option>
+        </select>
+    </div>
+    <div>
+        <select id="roleSelect" formControlName="role">
+            <option selected>Student</option>
+            <option>Professor</option>
+            <option>Creator</option>
+        </select>
+    </div>
+    <div>
+        <input type="date" id="dateofbirthSelect" formControlName="dateofbirth">
+    </div>
+    <div class="form-check justify-content-center align-items-center mb-4">
+        <input class="form-check-input me-2" type="checkbox" id="checkForRegister">
+        <label class="form-check-label" for="checkForRegister"> I agree to the <a class="text-body"><u>Terms of service</u></a> </label>
+    </div>
+    <div class="text-center mb-2">
+        <button class="btn btn-success btn-lg btn-block px-4 ms-2" type="submit" (click)="submit()" [disabled]="!registerForm.valid">Sign Up</button>
+    </div>
+<p>Form value: {{registerForm.value | json}}</p>
+<p>Form status: {{registerForm.status | json}}</p>

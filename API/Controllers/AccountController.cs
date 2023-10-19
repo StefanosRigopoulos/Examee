@@ -39,7 +39,8 @@ namespace API.Controllers
                 UserName = user.UserName,
                 Email = user.Email,
                 Token = await _tokenService.CreateToken(user),
-                PhotoURL = user.PhotoURL
+                PhotoURL = user.PhotoURL,
+                Role = user.Role
             };
         }
         
@@ -59,7 +60,8 @@ namespace API.Controllers
                 UserName = user.UserName,
                 Email = user.Email,
                 Token = await _tokenService.CreateToken(user),
-                PhotoURL = user.PhotoURL
+                PhotoURL = user.PhotoURL,
+                Role = user.Role
             };
         }
 
