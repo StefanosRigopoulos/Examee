@@ -1,0 +1,40 @@
+<div class="container">
+    <div class="upload-area"
+         [class.dragging]="!isUploading && !isProcessing"
+         (drop)="onFileDropped($event)"
+         (dragover)="preventDefault($event)"
+         (dragleave)="preventDefault($event)">
+        <ng-container *ngIf="!isUploading">
+            <ng-container *ngIf="!uploadedFile">
+                <input type="file" hidden #fileInput (change)="onFileSelected($event)" />
+                <p>Drag & Drop</p>
+                <button mat-raised-button color="primary" (click)="fileInput.click()">Select File</button>
+            </ng-container>
+            <ng-container *ngIf="uploadedFile">
+                <p>Uploaded: {{ uploadedFile.name }}</p>
+            </ng-container>
+        </ng-container>
+        <div *ngIf="isUploading" class="progress-overlay">
+            <mat-progress-bar mode="determinate"
+                              [value]="uploadProgress"
+                              class="progress-bar"></mat-progress-bar>
+            <p>Uploading... {{ uploadProgress }}%</p>
+        </div>
+    </div>
+    <div *ngIf="uploadedFile && !isProcessing && !isUploading && !downloadLink" class="action-area">
+        <button mat-raised-button color="accent" (click)="generateExams()"> Generate </button>
+    </div>
+    <div *ngIf="isProcessing" class="progress-area">
+        <mat-progress-bar mode="determinate"
+                          [value]="processingProgress"
+                          class="progress-bar"></mat-progress-bar>
+        <p>Generating exams... {{ processingProgress }}%</p>
+    </div>
+    <div *ngIf="!isProcessing && downloadLink" class="success-area">
+        <button mat-raised-button color="primary" (click)="downloadFile()"> Download </button>
+    </div>
+    <div *ngIf="!isProcessing && apiErrorMessage" class="error-area">
+        <p class="error-message">{{ apiErrorMessage }}</p>
+    </div>
+</div>
+  

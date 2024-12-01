@@ -1,0 +1,46 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.upload-area {
+    width: 400px;
+    height: 200px;
+    border: 2px dashed #3f51b5;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    transition: background-color 0.3s ease;
+}
+
+.upload-area.dragging {
+    background-color: #e3f2fd;
+}
+
+.action-area {
+    margin-top: 20px;
+}
+
+.progress-area {
+    margin-top: 20px;
+}
+
+.success-area,
+.error-area {
+    margin-top: 20px;
+}
+
+.error-message {
+    color: red;
+}
+
+button {
+    margin: 10px;
+}

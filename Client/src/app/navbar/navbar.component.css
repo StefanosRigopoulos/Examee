@@ -1,0 +1,36 @@
+.navbar {
+  justify-content: center;
+  background-color: blanchedalmond;
+}
+
+.navbar-nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.navbar-brand {
+  font-size: 40px;
+  font-family: 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
+  color:black;
+}
+
+.nav-link {
+  font-size: 20px;
+  color: black;
+}
+
+.container {
+  padding: 0.8rem;
+}
+
+@media (max-width: 768px) {
+  .navbar-nav {
+    flex-direction: row;
+  }
+  .navbar-brand {
+    font-size: 30px;
+  }
+  .container {
+    padding: 0.4rem;
+  }
+}

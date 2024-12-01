@@ -12,6 +12,15 @@ import { TextInputComponent } from './_essentials/forms/text-input/text-input.co
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { NavBarComponent } from './navbar/navbar.component';
+import { UploadComponent } from './upload/upload.component';
+
+// Upload Template
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +28,10 @@ import { RegisterComponent } from './register/register.component';
     HomeComponent,
     LoginComponent,
     RegisterComponent,
-    TextInputComponent
+    TextInputComponent,
+    NavBarComponent,
+    UploadComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +40,11 @@ import { RegisterComponent } from './register/register.component';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    MatButtonModule,
+    MatProgressBarModule,
+    MatIconModule,
+    MatSnackBarModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}

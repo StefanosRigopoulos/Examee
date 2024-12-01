@@ -1,3 +1,43 @@
-<p>Home Page</p>
-<button type="submit" [routerLink]="['/login']" routerLinkActive="active">Sign In</button>
-<button type="submit" [routerLink]="['/register']" routerLinkActive="active">Sign Up</button>
+<div class="hero-image d-flex flex-column align-items-center justify-content-center">
+  <h1 class="hero-title">Examee</h1>
+  <br><br><br><br>
+  <p class="hero-subtitle">Simple Exam Generator</p>
+</div>
+
+<div class="content">
+  <div class="container py-5">
+    <h1 class="text-center" style="font-size: 50px;">Welcome to Examee</h1>
+  </div>
+  <div class="container tm-pt-5 tm-pb-4">
+    <h2 class="text-center" style="font-size: 25px;">The procedure is simple</h2>
+    <div class="row text-center">
+      <article class="col-12 col-md-4 col-lg-4 col-xl-4 tm-article py-3">
+        <i class="fa-solid fa-download fa-6x pb-3"></i>
+        <h2 class="tm-color-primary tm-article-title-1" style="font-size: 25px;">1. Get the Exam Tool</h2>
+        <p style="font-size: 16px;">In order to start configuring your own examination<br>
+                                    you need our build tool. You can find the library<br>
+                                    with everything you will ever need through the link<br>
+                                    below. Simply import the DLL file into your project.</p>
+        <a href="#" class="tm-color-primary tm-font-semibold">Download</a>
+      </article>
+      <article class="col-12 col-md-4 col-lg-4 col-xl-4 tm-article py-3">
+        <i class="fa-solid fa-gears fa-6x pb-3"></i>
+        <h2 class="tm-color-primary tm-article-title-1" style="font-size: 25px;">2. Create the Exam</h2>
+        <p style="font-size: 16px;">The tool is very versatile and can help you<br>
+                                    create a very unique set of exam. You can<br>
+                                    create as many question as you want and also<br>
+                                    be able to provide your parameterson how you<br>
+                                    want to structure your examination.</p>
+      </article>
+      <article class="col-12 col-md-4 col-lg-4 col-xl-4 tm-article py-3">
+        <i class="fa-solid fa-cloud-arrow-up fa-6x pb-3"></i>
+        <h2 class="tm-color-primary tm-article-title-1" style="font-size: 25px;">3. Generate the Exams</h2>
+        <p style="font-size: 16px;">When you are done configuring the exam, head<br>
+                                    over to the upload page to use our generator<br>
+                                    to get your exams with the parameters you have<br>
+                                    provided.</p>
+        <a routerLink="/upload" routerLinkActive="active" class="tm-color-primary tm-font-semibold">Upload</a>                       
+      </article>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+.hero-image {
+  background-image: url('https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=1973&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); /* Replace with your image URL */
+  background-size: cover;
+  background-position: center;
+  height: 100vh; /* Adjusted to make the image smaller */
+  position: relative;
+  z-index: 1;
+}
+  
+.content {
+  color:darkslategray;
+  margin-top: 2rem; /* Added spacing after the hero image */
+}
+
+.hero-title {
+  font-size: 150px;
+  font-family: 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
+  color:darkslategray;
+}
+.hero-subtitle {
+  font-size: 50px;
+  font-family: 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
+  color:darkslategray;
+}
+
+.article {
+  font-family: 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
+  color:darkslategray;
+}
+  
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 130px;
+  }
+  .hero-subtitle {
+    font-size: 40px;
+  }
+}

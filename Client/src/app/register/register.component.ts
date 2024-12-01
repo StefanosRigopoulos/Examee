@@ -25,12 +25,10 @@ export class RegisterComponent implements OnInit {
   initializeForm(){
     this.registerForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      username: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(12), this.strongValidator()]],
       confirmPassword: ['', [Validators.required, this.matchValuesValidator('password')]],
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
-      dateofbirth: ['', Validators.required],
       gender: ['', Validators.required],
       role: ['', Validators.required],
       photourl: [Lists.RandomPhotoURL[Math.floor(Math.random() * Lists.RandomPhotoURL.length)]] //Pick a random photo from our list.
