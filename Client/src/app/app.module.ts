@@ -5,8 +5,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from './_essentials/modules/shared.module';
 import { JwtInterceptor } from './_essentials/interceptors/jwt.interceptor';
+import { NgxSpinnerModule } from "ngx-spinner";
+import { HasRoleDirective } from './_essentials/directives/has-role.directive';
+import { ErrorInterceptor } from './_essentials/interceptors/error.interceptor';
+import { LoadingInterceptor } from './_essentials/interceptors/loading.interceptor';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { ToastrModule } from 'ngx-toastr';
 
 import { TextInputComponent } from './_essentials/forms/text-input/text-input.component';
 import { HomeComponent } from './home/home.component';
@@ -14,13 +19,17 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { NavBarComponent } from './navbar/navbar.component';
 import { UploadComponent } from './upload/upload.component';
+import { FooterComponent } from './footer/footer.component';
+import { NotFoundComponent } from './_essentials/errors/not-found/not-found.component';
+import { ServerErrorComponent } from './_essentials/errors/server-error/server-error.component';
 
 // Upload Template
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { FooterComponent } from './footer/footer.component';
+import { AdminComponent } from './admin/admin.component';
+import { MemberProfileComponent } from './member/member-profile/member-profile.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +40,12 @@ import { FooterComponent } from './footer/footer.component';
     TextInputComponent,
     NavBarComponent,
     UploadComponent,
-    FooterComponent
+    FooterComponent,
+    HasRoleDirective,
+    NotFoundComponent,
+    ServerErrorComponent,
+    AdminComponent,
+    MemberProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -40,14 +54,23 @@ import { FooterComponent } from './footer/footer.component';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     MatButtonModule,
     MatProgressBarModule,
     MatIconModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    NgxSpinnerModule,
+    ModalModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-right'
+    }),
+    NgxSpinnerModule.forRoot({
+      type: 'clockwise'
+    })
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true},
   ],
   bootstrap: [AppComponent]
 })

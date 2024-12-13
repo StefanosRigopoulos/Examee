@@ -11,17 +11,18 @@
 .upload-area {
     width: 400px;
     height: 200px;
-    border: 2px dashed #3f51b5;
+    border: 2px dashed darkslategray;
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     transition: background-color 0.3s ease;
+    background-color: white;
 }
 
 .upload-area.dragging {
-    background-color: #e3f2fd;
+    background-color: blanchedalmond;
 }
 
 .action-area {
@@ -43,4 +44,9 @@
 
 button {
     margin: 10px;
+}
+
+.btn {
+    background-color: rgb(255, 209, 145);
+    color: black;
 }

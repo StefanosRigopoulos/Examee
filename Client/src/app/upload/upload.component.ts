@@ -1,4 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { FileService } from '../_essentials/services/file.service';
+import { AccountService } from '../_essentials/services/account.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-upload',
@@ -6,99 +9,47 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
   styleUrls: ['./upload.component.css']
 })
 export class UploadComponent {
-  @ViewChild('fileInput') fileInput!: ElementRef; // Reference to the file input element
-  uploadedFile: File | null = null; // Store uploaded file
-  isUploading = false; // Track upload state
-  uploadProgress = 0; // Progress value for file upload
-  isProcessing = false; // Track API processing state
-  processingProgress = 0; // Progress value for API call
-  apiErrorMessage = ''; // Error message from API
-  downloadLink = ''; // URL for the downloadable file
+  selectedFile: File | null = null;
+  uploadedFile: File | null = null;
+  progress: number = 0;
+  downloadUrl: string | null = null;
 
-  onFileDropped(event: DragEvent) {
-    event.preventDefault();
-    if (!event.dataTransfer || !event.dataTransfer.files.length) {
-      return;
-    }
-    this.handleFile(event.dataTransfer.files[0]);
+  constructor(public accountService: AccountService, private fileService: FileService, private router: Router) {}
+
+  uploadFile(): void {
+    if (!this.selectedFile) return;
+    this.fileService.uploadDll(this.selectedFile).subscribe({
+      next: (event) => {
+        if (event.status === 'progress') {
+          this.progress = event.progress;
+        } else if (event.status === 'complete') {
+          this.downloadUrl = event.body?.url || null;
+          this.uploadedFile = this.selectedFile;
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
   }
 
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.handleFile(file);
-    }
+  generateExams() {
+    
   }
 
-  preventDefault(event: Event) {
+  onFileSelected(file: File | null): void {
+    if (!file) return;
+    if (!this.isDllFile(file)) return;
+    this.selectedFile = file;
+  }
+
+  preventDefault(event: DragEvent): void {
     event.preventDefault();
     event.stopPropagation();
   }
 
-  handleFile(file: File) {
-    this.uploadedFile = file; // Replace the previous file with the new one
-    this.resetState();
-    this.startUpload();
-  }
-
-  resetState() {
-    this.isUploading = false;
-    this.uploadProgress = 0;
-    this.isProcessing = false;
-    this.processingProgress = 0;
-    this.apiErrorMessage = '';
-    this.downloadLink = '';
-  }
-
-  startUpload() {
-    this.isUploading = true;
-    this.uploadProgress = 0;
-
-    const uploadInterval = setInterval(() => {
-      if (this.uploadProgress >= 100) {
-        clearInterval(uploadInterval);
-        this.isUploading = false;
-      } else {
-        this.uploadProgress += 10; // Simulate upload progress
-      }
-    }, 300);
-  }
-
-  generateExams() {
-    if (!this.uploadedFile) {
-      alert('Please upload a file first.');
-      return;
-    }
-
-    this.isProcessing = true;
-    this.apiErrorMessage = '';
-    this.processingProgress = 0;
-
-    const processingInterval = setInterval(() => {
-      if (this.processingProgress >= 100) {
-        clearInterval(processingInterval);
-
-        // Simulate API success or error
-        const isSuccess = Math.random() > 0.3; // 70% success rate
-        if (isSuccess) {
-          this.downloadLink = 'https://example.com/output.pdf'; // Replace with real API response link
-        } else {
-          this.apiErrorMessage = 'An error occurred while generating the exams. Please try again.';
-        }
-        this.isProcessing = false;
-      } else {
-        this.processingProgress += 10; // Simulate API call progress
-      }
-    }, 300);
-  }
-
-  downloadFile() {
-    if (!this.downloadLink) {
-      return;
-    }
-    const link = document.createElement('a');
-    link.href = this.downloadLink;
-    link.download = 'output.pdf';
-    link.click();
+  private isDllFile(file: File): boolean {
+    const extension = file.name.split('.').pop()?.toLowerCase();
+    return extension === 'dll';
   }
 }

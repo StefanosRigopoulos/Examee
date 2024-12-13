@@ -1,10 +1,13 @@
 <nav class="navbar navbar-expand fixed-top shadow">
     <div class="container">
-        <a class="navbar-brand" href="#">Examee</a>
+        <a class="navbar-brand" routerLink="/" routerLinkActive="active">Examee</a>
         <ul class="navbar-nav">
             <ng-container *ngIf="accountService.currentUser$ | async">
                 <li *appHasRole="['Admin']" class="nav-item">
-                    <a class="nav-link" routerLink="/admin" routerLinkActive="active">Admin</a>
+                    <a class="nav-link" routerLink="/admin" routerLinkActive="active">Dashboard</a>
+                </li>
+                <li *ngIf="(accountService.currentUser$ | async) as user" class="nav-item">
+                    <a class="nav-link" routerLink="/{{user.userName}}">Profile</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" routerLink="/" routerLinkActive="active" (click)="logout()">Exit <i class="fa-solid fa-right-from-bracket"></i></a>
