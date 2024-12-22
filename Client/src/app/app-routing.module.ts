@@ -11,12 +11,13 @@ import { MemberProfileComponent } from './member/member-profile/member-profile.c
 import { AuthGuard } from './_essentials/guards/auth.guard';
 import { AdminGuard } from './_essentials/guards/admin.guard';
 import { MemberDetailResolver } from './_essentials/resolvers/member-details.resolver';
+import { PreventExitGuard } from './_essentials/guards/prevent-exit.guard';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
-  {path: 'upload', component: UploadComponent},
+  {path: 'upload', component: UploadComponent, canDeactivate: [PreventExitGuard]},
   {path: 'not-found', component: NotFoundComponent},
   {path: 'server-error', component: ServerErrorComponent},
   {path: '',

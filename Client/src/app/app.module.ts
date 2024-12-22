@@ -11,7 +11,6 @@ import { HasRoleDirective } from './_essentials/directives/has-role.directive';
 import { ErrorInterceptor } from './_essentials/interceptors/error.interceptor';
 import { LoadingInterceptor } from './_essentials/interceptors/loading.interceptor';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { ToastrModule } from 'ngx-toastr';
 
 import { TextInputComponent } from './_essentials/forms/text-input/text-input.component';
 import { HomeComponent } from './home/home.component';
@@ -22,14 +21,17 @@ import { UploadComponent } from './upload/upload.component';
 import { FooterComponent } from './footer/footer.component';
 import { NotFoundComponent } from './_essentials/errors/not-found/not-found.component';
 import { ServerErrorComponent } from './_essentials/errors/server-error/server-error.component';
+import { AdminComponent } from './admin/admin.component';
+import { MemberProfileComponent } from './member/member-profile/member-profile.component';
+import { MemberExamItemComponent } from './member/member-exam-item/member-exam-item.component';
+import { ErrorModalComponent } from './_essentials/errors/error-modal/error-modal.component';
 
 // Upload Template
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { AdminComponent } from './admin/admin.component';
-import { MemberProfileComponent } from './member/member-profile/member-profile.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,9 @@ import { MemberProfileComponent } from './member/member-profile/member-profile.c
     NotFoundComponent,
     ServerErrorComponent,
     AdminComponent,
-    MemberProfileComponent
+    MemberProfileComponent,
+    MemberExamItemComponent,
+    ErrorModalComponent
   ],
   imports: [
     BrowserModule,
@@ -58,11 +62,9 @@ import { MemberProfileComponent } from './member/member-profile/member-profile.c
     MatProgressBarModule,
     MatIconModule,
     MatSnackBarModule,
+    MatDialogModule,
     NgxSpinnerModule,
     ModalModule,
-    ToastrModule.forRoot({
-      positionClass: 'toast-bottom-right'
-    }),
     NgxSpinnerModule.forRoot({
       type: 'clockwise'
     })

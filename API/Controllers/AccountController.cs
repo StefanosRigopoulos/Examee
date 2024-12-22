@@ -1,5 +1,6 @@
 using API.DTOs;
 using API.Entities;
+using API.Errors;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
@@ -21,8 +22,8 @@ namespace API.Controllers
 
         [HttpPost("register")]
         public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO) {
-            if (await UsernameExists(registerDTO.UserName)) return BadRequest("Username is taken");
-            if (await EmailExists(registerDTO.Email)) return BadRequest("Email is taken");
+            if (await UsernameExists(registerDTO.UserName)) return BadRequest(new ApiException(400, "User already present with this name"));
+            if (await EmailExists(registerDTO.Email)) return BadRequest(new ApiException(400, "Email is already taken"));
 
             var user = _mapper.Map<AppUser>(registerDTO);
 
@@ -49,11 +50,11 @@ namespace API.Controllers
 
             // Checking the username
             var user = await _userManager.Users.SingleOrDefaultAsync(x => x.Email == loginDTO.Email);
-            if (user == null) return Unauthorized("Invalid Email!");
+            if (user == null) return Unauthorized(new ApiException(401, "Invalid Email!"));
 
             // Checking the password
             var result = await _userManager.CheckPasswordAsync(user, loginDTO.Password);
-            if (!result) return Unauthorized("Invalid Password");
+            if (!result) return Unauthorized(new ApiException(401, "Invalid Password!"));
 
             return new UserDTO
             {

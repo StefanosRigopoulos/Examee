@@ -12,7 +12,6 @@ import { Lists } from '../_essentials/Lists';
 
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup = new FormGroup({});
-  step = 1;
   maxDate: Date = new Date();
 
   constructor(private accountService: AccountService, private router: Router, private fb: FormBuilder) { }
@@ -24,14 +23,14 @@ export class RegisterComponent implements OnInit {
 
   initializeForm(){
     this.registerForm = this.fb.group({
+      userName: [''],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(12), this.strongValidator()]],
       confirmPassword: ['', [Validators.required, this.matchValuesValidator('password')]],
-      firstname: ['', Validators.required],
-      lastname: ['', Validators.required],
-      gender: ['', Validators.required],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
       role: ['', Validators.required],
-      photourl: [Lists.RandomPhotoURL[Math.floor(Math.random() * Lists.RandomPhotoURL.length)]] //Pick a random photo from our list.
+      photoURL: [Lists.RandomPhotoURL[Math.floor(Math.random() * Lists.RandomPhotoURL.length)]] //Pick a random photo from our list.
     });
     this.registerForm.controls['password'].valueChanges.subscribe({
       next: () => this.registerForm.controls['confirmPassword'].updateValueAndValidity()
@@ -60,8 +59,15 @@ export class RegisterComponent implements OnInit {
   submit() {
     var checkbox = <HTMLInputElement> document.getElementById("checkForRegister");
     if (checkbox.checked == true) {
-      this.accountService.register(this.registerForm.value).subscribe({
-        next: response => console.log('Successful registration!'),
+      let formValues = this.registerForm.getRawValue();
+      const fullName = `${formValues.firstName}_${formValues.lastName}`;
+      formValues.userName = fullName;
+
+      this.accountService.register(formValues).subscribe({
+        next: response => {
+          console.log('Successful register!');
+          this.router.navigateByUrl('/');
+        },
         error: error => console.log(error)
       });
     } else {

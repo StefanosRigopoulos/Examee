@@ -1,0 +1,10 @@
+.card {
+    align-items: center;
+    border-style: hidden;
+}
+.card-body {
+    width: 220px;
+    height: 270px;
+    border-radius: 5% 35% 5% 5%;
+    background-color: rgb(255, 228, 193);
+}

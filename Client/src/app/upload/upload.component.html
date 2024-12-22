@@ -1,47 +1,99 @@
 <div class="container">
-    <!--
-    <div *ngIf="uploadedFile && !isProcessing && !isUploading && !downloadLink" class="action-area">
-        <button mat-raised-button style="background-color: rgb(255, 209, 145);" (click)="generateExams()"> Generate </button>
-    </div>
-    <div *ngIf="isProcessing" class="progress-area">
-        <mat-progress-bar mode="determinate"
-                          [value]="processingProgress"
-                          class="progress-bar"></mat-progress-bar>
-        <p>Generating exams... {{ processingProgress }}%</p>
-    </div>
-    <div *ngIf="!isProcessing && downloadLink" class="success-area">
-        <button mat-raised-button style="background-color: rgb(255, 209, 145);" (click)="downloadFile()"> Download </button>
-    </div>
-    <div *ngIf="!isProcessing && apiErrorMessage" class="error-area">
-        <p class="error-message">{{ apiErrorMessage }}</p>
-    </div>-->
     <div *ngIf="(accountService.currentUser$ | async)">
-        <ng-container *ngIf="!uploadedFile">
-            <div class="upload-area"
-                 (drop)="onFileSelected($event.dataTransfer?.files?.[0] || null)"
-                 (dragover)="preventDefault($event)"
-                 (dragleave)="preventDefault($event)">
-                <ng-container *ngIf="!selectedFile">
-                    <input type="file"
-                           hidden
-                           #fileInput
-                           accept=".dll"
-                           (change)="onFileSelected(fileInput.files?.[0] || null)"/>
-                    <p style="color: darkslategray;">Drag & Drop</p>
-                    <button mat-raised-button style="background-color: rgb(255, 209, 145);" (click)="fileInput.click()">Select File</button>
+        <div *appHasRole="['Professor']">
+            <ng-container *ngIf="selectState">      <!-- Select -->
+                <div class="upload-area"
+                     (drop)="onFileSelected($event.dataTransfer?.files?.[0] || null)"
+                     (dragover)="preventDefault($event)"
+                     (dragleave)="preventDefault($event)">
+                    <ng-container *ngIf="!selectedFile">
+                        <input type="file"
+                               hidden
+                               #fileInput
+                               accept=".dll"
+                               (change)="onFileSelected(fileInput.files?.[0] || null)"/>
+                        <p style="color: darkslategray;">Drag & Drop</p>
+                        <button mat-raised-button style="background-color: rgb(255, 209, 145);" (click)="fileInput.click()" (click)="processStarted()">Select File</button>
+                    </ng-container>
+                    <ng-container *ngIf="selectedFile">
+                        <p>File selected: {{ selectedFile.name }}</p>
+                        <form [formGroup]="genForm" id="msform" autocomplete="off">
+                            <div class="row justify-content-center" style="padding-left: 15px; padding-right: 15px;">
+                                <div class="col-4">
+                                    <label for="copies" class="form-label">Copies</label>
+                                    <app-text-input [formControl]="$any(genForm.controls['copies'])" [label]="'Copies'" [type]="'text'"></app-text-input>
+                                </div>
+                                <div class="col-4">
+                                    <label for="questions" class="form-label">Questions</label>
+                                    <app-text-input [formControl]="$any(genForm.controls['questions'])" [label]="'Questions'" [type]="'text'"></app-text-input>
+                                </div>
+                            </div>
+                            <button mat-raised-button style="background-color: rgb(255, 209, 145);" [disabled]="!genForm.valid" (click)="generateExams()">Generate Exams</button>
+                        </form>
+                    </ng-container>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="!selectState">
+                <ng-container *ngIf="generateState">    <!-- Generate State -->
+                    <div class="upload-area">
+                        <p>Generating...</p>
+                    </div>
                 </ng-container>
-                <ng-container *ngIf="selectedFile">
-                    <p>File selected: {{ selectedFile.name }}</p>
-                    <button mat-raised-button style="background-color: rgb(255, 209, 145);" (click)="uploadFile()">Upload File</button>
+                <ng-container *ngIf="!generateState">    <!-- Save & Download State -->
+                    <div class="upload-area">
+                        <ng-container *ngIf="saveDownloadState">
+                            <ng-container *ngIf="!fileUploadedState">
+                                <p>Exams where generated successfully</p>
+                                <div class="row justify-content-center d-flex">
+                                    <div class="col-6">
+                                        <button mat-raised-button
+                                                style="background-color: rgb(255, 209, 145);"
+                                                (click)="uploadFile()"
+                                                (click)="processEnded()">Upload</button>
+                                    </div>
+                                    <div class="col-6">
+                                        <button mat-raised-button
+                                                style="background-color: rgb(255, 209, 145);"
+                                                (click)="onDownloadPdf()"
+                                                (click)="processEnded()">Download</button>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="fileUploadedState">
+                                <p>Exam was uploaded successfully to user's profile!</p>
+                                <div class="row justify-content-center d-flex">
+                                    <div class="col-6">
+                                        <button mat-raised-button
+                                                style="background-color: rgb(255, 209, 145);"
+                                                disabled
+                                                (click)="uploadFile()">Upload</button>
+                                    </div>
+                                    <div class="col-6">
+                                        <button mat-raised-button
+                                                style="background-color: rgb(255, 209, 145);"
+                                                (click)="onDownloadPdf()"
+                                                (click)="processEnded()">Download</button>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="!saveDownloadState">
+                            <p>Problem generating exams.</p>
+                        </ng-container>
+                    </div>
                 </ng-container>
+            </ng-container>
+        </div>
+        <div *appHasRole="['Student']">
+            <div class="upload-area" style="color:darkslategray;">
+                <h3>Only professors can create exams!</h3>
             </div>
-        </ng-container>
-        <ng-container *ngIf="uploadedFile">
-            <div class="upload-area">
-                <p>File {{ uploadedFile.name }} successfully uploaded!</p>
-                <button mat-raised-button style="background-color: rgb(255, 209, 145);" (click)="generateExams()">Generate Exams</button>
+        </div>
+        <div *appHasRole="['Admin']">
+            <div class="upload-area" style="color:darkslategray;">
+                <h3>Admins can not use the service.</h3>
             </div>
-        </ng-container>
+        </div>
     </div>
     <div *ngIf="!(accountService.currentUser$ | async)">
         <div class="upload-area" style="color:darkslategray;">
@@ -53,11 +105,4 @@
             </div>
         </div>
     </div>
-    <!--
-    <div class="upload-container">
-        <a *ngIf="downloadUrl" [href]="downloadUrl" target="_blank" download>
-          Download File
-        </a>
-    -->
 </div>
-  

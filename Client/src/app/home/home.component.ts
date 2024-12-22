@@ -7,11 +7,15 @@ import { FileService } from '../_essentials/services/file.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  fileUrl: string | null = null;
+  dllUrl: string | null = null;
+  documentationUrl: string | null = null;
 
   constructor(private fileService: FileService) {
     this.fileService.getFileDllURL().subscribe((url) => {
-      this.fileUrl = url;
+      this.dllUrl = url;
+    });
+    this.fileService.getDocumentationPDFURL().subscribe((url) => {
+      this.documentationUrl = url;
     });
   }
 }

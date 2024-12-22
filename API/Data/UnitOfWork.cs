@@ -14,6 +14,7 @@ namespace API.Data
         }
 
         public IUserRepository UserRepository => new UserRepository(_context, _mapper);
+        public IExamRepository ExamRepository => new ExamRepository(_context, _mapper);
         
         public async Task<bool> Complete()
         {

@@ -12,33 +12,17 @@ export class FileService {
   constructor(private http: HttpClient) {}
 
   getFileDllURL() {
-    return this.http.get(this.baseUrl + "download/get_dll", { responseType: 'text' });
+    return this.http.get(this.baseUrl + "file/get-dll", { responseType: 'text' });
   }
 
-  uploadDll(file: File): Observable<any> {
+  getDocumentationPDFURL() {
+    return this.http.get(this.baseUrl + "file/get-documentation-pdf", { responseType: 'text' });
+  }
+
+  uploadDll(file: File, username: string) {
     const formData = new FormData();
     formData.append('file', file);
-
-    return new Observable((observer) => {
-      this.http
-        .post(this.baseUrl + "upload/dll", formData, {
-          reportProgress: true,
-          observe: 'events',
-        })
-        .subscribe({
-          next: (event: any) => {
-            if (event.type === HttpEventType.UploadProgress) {
-              const progress = Math.round((event.loaded / event.total) * 100);
-              observer.next({ status: 'progress', progress });
-            } else if (event.type === HttpEventType.Response) {
-              observer.next({ status: 'complete', body: event.body });
-              observer.complete();
-            }
-          },
-          error: (error) => {
-            observer.error(error);
-          },
-        });
-    });
+    formData.append('username', username);
+    return this.http.post(this.baseUrl + "file/upload-dll", formData);
   }
 }

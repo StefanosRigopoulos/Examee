@@ -6,11 +6,13 @@
                 <li *appHasRole="['Admin']" class="nav-item">
                     <a class="nav-link" routerLink="/admin" routerLinkActive="active">Dashboard</a>
                 </li>
-                <li *ngIf="(accountService.currentUser$ | async) as user" class="nav-item">
-                    <a class="nav-link" routerLink="/{{user.userName}}">Profile</a>
-                </li>
+                <div *appHasRole="['Student', 'Professor']">
+                    <li *ngIf="(accountService.currentUser$ | async) as user" class="nav-item">
+                        <a class="nav-link" routerLink="/{{user.userName}}"><i class="fa-solid fa-user"></i></a>
+                    </li>
+                </div>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/" routerLinkActive="active" (click)="logout()">Exit <i class="fa-solid fa-right-from-bracket"></i></a>
+                    <a class="nav-link" routerLink="/" routerLinkActive="active" (click)="logout()"><i class="fa-solid fa-right-from-bracket"></i></a>
                 </li>
             </ng-container>
             <ng-container *ngIf="!(accountService.currentUser$ | async)">

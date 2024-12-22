@@ -4,11 +4,11 @@
         <form [formGroup]="registerForm" id="msform" autocomplete="off">
             <div class="mb-3">
                 <label for="firstname" class="form-label">First Name</label>
-                <app-text-input [formControl]="$any(registerForm.controls['firstname'])" [label]="'First Name'"></app-text-input>
+                <app-text-input [formControl]="$any(registerForm.controls['firstName'])" [label]="'First Name'"></app-text-input>
             </div>
             <div class="mb-3">
                 <label for="lastname" class="form-label">Last Name</label>
-                <app-text-input [formControl]="$any(registerForm.controls['lastname'])" [label]="'Last Name'"></app-text-input>
+                <app-text-input [formControl]="$any(registerForm.controls['lastName'])" [label]="'Last Name'"></app-text-input>
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
@@ -23,20 +23,16 @@
                 <app-text-input [formControl]="$any(registerForm.controls['confirmPassword'])" [label]="'Confirm Password'" [type]="'password'"></app-text-input>
             </div>
             <div class="mb-3">
-                <label for="genderSelect" class="form-label">Gender</label>
-                <select id="genderSelect" class="form-select" formControlName="gender" required>
-                    <option value="" disabled selected>Select your gender</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                </select>
-            </div>
-            <div class="mb-3">
                 <label for="roleSelect" class="form-label">Role</label>
                 <select id="roleSelect" class="form-select" formControlName="role" required>
                     <option value="" disabled selected>Select your role</option>
                     <option value="student">Student</option>
                     <option value="professor">Professor</option>
                 </select>
+            </div>
+            <div class="form-check justify-content-center align-items-center mb-4">
+                <input class="form-check-input me-2" type="checkbox" id="checkForRegister">
+                <label class="form-check-label" for="checkForRegister"> I agree to the <a class="text-body"><u>Terms of service</u></a> </label>
             </div>
             <div class="d-grid gap-2">
                 <button class="btn btn-primary btn-lg btn-block px-4 ms-2" type="submit" (click)="submit()" [disabled]="!registerForm.valid">Sign Up</button>

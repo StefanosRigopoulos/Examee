@@ -1,2 +1,44 @@
-<br><br><br><br><br><br><br><br><p>member-profile works!</p>
-//TODO
+<!-- <div class="container">
+    <div class="row">
+        <div class="ratio-1x1">
+            <img src="{{member.photoURL}}" alt="member.userName" class="profile-pic">
+        </div>
+    </div>
+    <br>
+    <div class="area">
+        <div class="row">
+            <h1>{{member.firstName}} {{member.lastName}}</h1>
+        </div>
+        <div class="row p-4">
+            <div class="col-6 mb-4" *ngFor="let exam of exams">
+                <app-member-exam-item [exam]="exam" [member]="member"></app-member-exam-item>
+            </div>
+            <button class="btn btn-xlg p-3" routerLink="/upload"><i class="fa fa-plus" style="font-size: 50px;"></i></button>
+        </div>
+    </div>
+</div> -->
+
+<div class="container">
+    <div class="row">
+        <div class="ratio-1x1">
+            <img src="{{member.photoURL}}" alt="member.userName" class="profile-pic">
+        </div>
+    </div>
+    <br>
+    <div class="area">
+        <h1><strong style="color: darkslategray;">{{member.firstName}} {{member.lastName}}</strong></h1>
+        <hr>
+        <div class="row justify-content-center d-flex">
+            <div 
+                class="col-12 col-sm-6 col-lg-4 d-flex justify-content-center mb-3"
+                *ngFor="let exam of exams">
+                <app-member-exam-item [exam]="exam" [member]="member"></app-member-exam-item>
+            </div>
+            <div class="col-12 text-center">
+                <button class="btn btn-xlg p-3" style="color: darkslategray;" routerLink="/upload">
+                    <i class="fa fa-plus" style="font-size: 70px;"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

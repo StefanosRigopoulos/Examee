@@ -11,7 +11,7 @@
                 <app-text-input [formControl]="$any(loginForm.controls['password'])" [label]="'Password'" [type]="'password'"></app-text-input>
             </div>
             <div class="d-grid gap-2">
-                <button type="submit" class="btn" routerLink="/" (click)="submit()">Sign In</button>
+                <button mat-raised-button style="background-color: rgb(255, 209, 145);" type="submit" class="btn" (click)="submit()" [disabled]="!loginForm.valid">Sign In</button>
             </div>
         </form>
     </div>

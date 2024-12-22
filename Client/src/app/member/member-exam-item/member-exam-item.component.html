@@ -1,0 +1,102 @@
+<!-- <div class="card mb-4 p-2" style="height: 100%; background-color: rgb(255, 246, 231);" *ngIf="exam">
+    <i class="fa-solid fa-file-word fa-6x"></i>
+    <div class="card-body p-2">
+        <h2 class="card-title text-center mb-1">{{exam.examName}}</h2>
+        <ng-container *ngIf="!process">
+            <form [formGroup]="genForm" id="msform" autocomplete="off">
+                <div class="row">
+                    <div class="col-6">
+                        <label for="copies" class="form-label">Copies</label>
+                        <app-text-input [formControl]="$any(genForm.controls['copies'])"
+                                        [label]="'Copies'"
+                                        [type]="'text'"></app-text-input>
+                    </div>
+                    <div class="col-6">
+                        <label for="questions" class="form-label">Questions</label>
+                        <app-text-input [formControl]="$any(genForm.controls['questions'])"
+                                        [label]="'Questions'"
+                                        [type]="'text'"></app-text-input>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <button mat-raised-button
+                                style="background-color: rgb(255, 209, 145); margin-top: 10px;"
+                                [disabled]="!genForm.valid"
+                                (click)="generateExams()">Generate Exams</button>
+                    </div>
+                    <div class="col-6">
+                        <button mat-raised-button
+                                style="background-color: rgb(255, 209, 145); margin-top: 10px;"
+                                (click)="deleteExam()"><i class="fa-solid fa-trash-can fa-2x"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </ng-container>
+        <ng-container *ngIf="process">
+            <div class="pt-4">
+                <button mat-raised-button
+                        style="background-color: rgb(255, 209, 145);">
+                        <a [href]="downloadUrl"
+                           download
+                           class="tm-color-primary tm-font-semibold"
+                           (click)="processEnded()">Download</a>
+                </button>
+            </div>
+        </ng-container>
+    </div>
+</div> -->
+
+<div class="card" *ngIf="exam">
+    <form [formGroup]="genForm" id="msform" autocomplete="off">
+        <div class="card-body">
+            <i class="fa-solid fa-file-lines fa-5x" style="color: darkslategray;"></i>
+            <h3 style="color: darkslategray;"><strong>{{exam.examName}}</strong></h3>
+            <hr>
+            <ng-container *ngIf="!process">     <!-- Before Generation -->
+                <div class="row">
+                    <div class="col-6">
+                        <app-text-input [formControl]="$any(genForm.controls['copies'])"
+                                        [label]="'Copies'"
+                                        [type]="'text'"></app-text-input>
+                    </div>
+                    <div class="col-6">
+                        <app-text-input [formControl]="$any(genForm.controls['questions'])"
+                                        [label]="'Q\'s No'"
+                                        [type]="'text'"></app-text-input>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-6">
+                        <button mat-raised-button
+                                style="background-color: rgb(255, 209, 145);"
+                                [disabled]="!genForm.valid"
+                                (click)="generateExams()">Generate</button>
+                    </div>
+                    <div class="col-6">
+                        <button mat-raised-button
+                                style="background-color: rgb(255, 209, 145); color: darkslategray;"
+                                (click)="deleteExam()"><i class="fa-solid fa-trash-can fa-2x"></i>
+                        </button>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="process">      <!-- After Generation -->
+                <p>Exams where successfully generated!</p>
+                <hr>
+                    <button mat-raised-button
+                            style="background-color: rgb(255, 209, 145);"
+                            (click)="onDownloadPdf()"
+                            (click)="processEnded()">Download</button>
+            </ng-container>
+        </div>
+    </form>
+</div>
+<div class="card" *ngIf="!exam">
+    <div class="card-body">
+        <i class="fa-solid fa-x fa-5x"></i>
+        <h3>No Exams Present</h3>
+    </div>
+</div>

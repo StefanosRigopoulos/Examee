@@ -1,1 +1,15 @@
-<p>server-error works!</p>
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="card p-4" style="width: 100%; max-width: 400px;">
+        <h1 class="text-center fw-bold mb-2" style="color:darkslategray;">Error 500</h1>
+        <h4 class="text-center fw-bold mb-2" style="color:darkslategray;">Server Error</h4>
+        <br>
+        <p class="text-center fw-bold">Following is the stack trace:</p>
+        <code class="mt-5" style="color: black;">
+            {{error.details}}
+        </code>
+        <br>
+        <button mat-raised-button style="background-color: rgb(255, 209, 145);" class="btn">
+            <a class="nav-link" routerLink="/" routerLinkActive="active">Return to home page</a>
+        </button>
+    </div>
+</div>

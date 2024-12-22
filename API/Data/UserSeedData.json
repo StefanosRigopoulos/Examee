@@ -4,29 +4,23 @@
         "Email": "admin@gmail.com",
         "FirstName": "Administrator",
         "LastName": "Platform",
-        "Gender": "male",
         "Role": "Admin",
-        "DateOfBirth": "1950-01-01",
         "PhotoURL": "https://images.unsplash.com/photo-1635732346025-d0ed3500ea7e?auto=format&fit=crop&q=80&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&w=2038"
     },
     {
-        "UserName": "Kamora",
+        "UserName": "stefanos_rigopoulos",
         "Email": "stefarigop@gmail.com",
         "FirstName": "Stefanos",
         "LastName": "Rigopoulos",
-        "Gender": "male",
-        "Role": "Student",
-        "DateOfBirth": "2000-01-31",
+        "Role": "Professor",
         "PhotoURL": "https://images.unsplash.com/photo-1690729356341-bbd33d01d2db?auto=format&fit=crop&q=80&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&w=2081"
     },
     {
-        "UserName": "Dhmhgre",
+        "UserName": "grigoris_dimitroulakos",
         "Email": "dhmhgre@gmail.com",
         "FirstName": "Grigoris",
         "LastName": "Dimitroulakos",
-        "Gender": "male",
-        "Role": "Professor",
-        "DateOfBirth": "1978-01-31",
+        "Role": "Student",
         "PhotoURL": "https://images.unsplash.com/photo-1673365612839-70c479268d70?auto=format&fit=crop&q=80&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&w=2080"
     }
 ]

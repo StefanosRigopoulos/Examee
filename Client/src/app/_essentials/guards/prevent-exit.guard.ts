@@ -1,6 +1,10 @@
-import { CanActivateFn } from '@angular/router';
+import { CanDeactivateFn } from '@angular/router';
+import { Observable } from 'rxjs';
 
-export const PreventExitGuard: CanActivateFn = (route, state) => {
-  //TODO
-  return true;
+export interface CanComponentDeactivate {
+  canDeactivate: () => Observable<boolean> | Promise<boolean> | boolean;
+}
+
+export const PreventExitGuard: CanDeactivateFn<CanComponentDeactivate> = (component) => {
+  return component.canDeactivate ? component.canDeactivate() : true;
 };

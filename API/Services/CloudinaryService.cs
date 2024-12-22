@@ -14,21 +14,35 @@ namespace API.Services {
 
             _cloudinary = new Cloudinary(acc);
         }
-        // Get download URL
+
         public string GetDownloadURL()
         {
             return "https://res.cloudinary.com/duovczxpz/raw/upload/v1733071091/examee/BuilderTool.dll";
         }
-        // Upload DLL to execute
+        
+        public string GetDocumentationPDFUrl()
+        {
+            return "https://res.cloudinary.com/duovczxpz/image/upload/v1734860810/examee/Documentation.pdf";
+        }
+        
         public async Task<RawUploadResult> UploadFileAsync(Stream fileStream, string fileName)
         {
             var uploadParams = new RawUploadParams
             {
                 File = new FileDescription(fileName, fileStream),
-                Folder = "examee/Uploaded_DLLs"
+                Folder = "examee/Uploaded_DLLs/"
             };
 
             return await _cloudinary.UploadAsync(uploadParams);
+        }
+
+        public async Task<DeletionResult> DeleteExamFileAsync(string publicId)
+        {
+            var deleteParams = new DeletionParams(publicId)
+            {
+                ResourceType = ResourceType.Raw
+            };
+            return await _cloudinary.DestroyAsync(deleteParams);
         }
     }
 }

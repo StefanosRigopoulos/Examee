@@ -8,14 +8,15 @@ import {
 } from '@angular/common/http';
 import { catchError, Observable } from 'rxjs';
 import { NavigationExtras, Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
+import { ErrorModalComponent } from '../errors/error-modal/error-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
 
-  constructor(private router: Router, private toastr: ToastrService) {}
+  constructor(private router: Router, private dialog: MatDialog) {}
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error) {
@@ -30,11 +31,11 @@ export class ErrorInterceptor implements HttpInterceptor {
                 }
                 throw modelStateErrors.flat();
               } else {
-                this.toastr.error(error.error, error.status.toString());
+                this.openErrorModal(error);
               }
               break;
             case 401:
-              this.toastr.error('Unauthorised', error.status.toString());
+              this.openErrorModal(error);
               break;
             case 404:
               this.router.navigateByUrl('/not-found');
@@ -44,12 +45,25 @@ export class ErrorInterceptor implements HttpInterceptor {
               this.router.navigateByUrl('/server-error', navigationExtras);
               break;
             default:
-              this.toastr.error('Something unexpected went wrong');
+              this.openErrorModal(error);
               console.log(error);
           }
         }
         throw error;
       })
     )
+  }
+
+  private openErrorModal(error: HttpErrorResponse): void {
+    this.dialog.open(ErrorModalComponent, {
+      width: '400px',
+      data: {
+        title: 'Error Notification',
+        status: error.status,
+        message: error.error.message || 'An unexpected error occurred',
+        details: error.error.details || 'No further details are provided',
+      },
+      disableClose: true,
+    });
   }
 }

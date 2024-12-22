@@ -1,31 +1,76 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FileService } from '../_essentials/services/file.service';
 import { AccountService } from '../_essentials/services/account.service';
 import { Router } from '@angular/router';
+import { CanComponentDeactivate } from '../_essentials/guards/prevent-exit.guard';
+import { Observable, take } from 'rxjs';
+import { User } from '../_essentials/models/user';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ExamService } from '../_essentials/services/exam.service';
 
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.component.html',
   styleUrls: ['./upload.component.css']
 })
-export class UploadComponent {
-  selectedFile: File | null = null;
-  uploadedFile: File | null = null;
-  progress: number = 0;
-  downloadUrl: string | null = null;
+export class UploadComponent implements OnInit, CanComponentDeactivate {
+  process: boolean = false;
+  selectState: boolean = true;
+  generateState: boolean = false;
+  saveDownloadState: boolean = false;
+  fileUploadedState: boolean = false;
 
-  constructor(public accountService: AccountService, private fileService: FileService, private router: Router) {}
+  selectedFile: File | null = null;
+  generatedPdf: Blob | null = null;
+
+  genForm: FormGroup = new FormGroup({});
+
+  progress: number = 0;
+  user?: User;
+  
+  constructor(public accountService: AccountService,
+              private fileService: FileService,
+              private examService: ExamService,
+              private router: Router,
+              private fb: FormBuilder) {
+    this.accountService.currentUser$.pipe(take(1)).subscribe({
+      next: user => {
+        if (user) this.user = user;
+      }
+    })
+  }
+
+  ngOnInit(): void {
+    this.initializeForm();
+  }
+  
+  initializeForm() {
+    this.genForm = this.fb.group({
+      copies: ['', [Validators.required, Validators.pattern('^(?:[1-9][0-9]?|[1-4][0-9]{2}|500)$')]],
+      questions: ['', [Validators.required, Validators.pattern('^(?:[1-9]|10)$')]]
+    });
+  }
+  
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    if (this.process) {
+      return confirm('A file is being uploaded or processed. Do you really want to leave?');
+    }
+    return true;
+  }
+
+  processStarted() {
+    this.process = true;
+  }
+
+  processEnded() {
+    this.process = false;
+  }
 
   uploadFile(): void {
     if (!this.selectedFile) return;
-    this.fileService.uploadDll(this.selectedFile).subscribe({
-      next: (event) => {
-        if (event.status === 'progress') {
-          this.progress = event.progress;
-        } else if (event.status === 'complete') {
-          this.downloadUrl = event.body?.url || null;
-          this.uploadedFile = this.selectedFile;
-        }
+    this.fileService.uploadDll(this.selectedFile, this.user!.userName).subscribe({
+      next: () => {
+        this.fileUploadedState = true;
       },
       error: (err) => {
         console.log(err);
@@ -34,7 +79,42 @@ export class UploadComponent {
   }
 
   generateExams() {
-    
+    this.selectState = false;       // File selected ended.
+    this.generateState = true;      // Generate process started.
+
+    if (!this.selectedFile) return;
+
+    var copies = this.genForm.controls['copies'].value;
+    var questions = this.genForm.controls['questions'].value;
+
+    this.examService.executeExamFile(this.selectedFile, copies, questions).subscribe({
+      next: (blob: Blob) => {
+        this.generatedPdf = blob;
+      },
+      error: error => {
+        console.log('Error executing DLL:', error);
+      }
+    });
+    this.generateState = false;     // Generate process ended.
+    this.saveDownloadState = true;  // Save or Download process started.
+  }
+
+  // Downloads the stored PDF Blob
+  onDownloadPdf(): void {
+    if (this.generatedPdf) {
+      const link = document.createElement('a');
+      const url = window.URL.createObjectURL(this.generatedPdf);
+      const nameParts = this.selectedFile!.name.split('.');
+
+      nameParts.pop();
+      link.download = nameParts + '.pdf';
+      link.href = url;
+      link.click();
+
+      window.URL.revokeObjectURL(url);
+    } else {
+      alert('No PDF available for download. Please generate it first.');
+    }
   }
 
   onFileSelected(file: File | null): void {
