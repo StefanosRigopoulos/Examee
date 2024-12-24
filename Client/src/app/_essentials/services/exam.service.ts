@@ -16,9 +16,10 @@ export class ExamService {
     return this.http.get<Exam[]>(this.baseUrl + "examdll/" + username);
   }
 
-  executeExamFile(file: File, copies: string, questions: string) {
+  executeExamFile(file: File, username: string, copies: string, questions: string) {
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('username', username);
     formData.append('copies', copies);
     formData.append('questions', questions);
     return this.http.post(this.baseUrl + "examdll/execute_exam_file", formData, { responseType: 'blob' });

@@ -65,11 +65,11 @@ export class MemberExamItemComponent {
 
   deleteExam() {
     this.examService.deleteExamFile(this.member!.userName, this.exam!.examName).subscribe({
-        next: response => {
-          this.router.navigateByUrl('');
-          console.log('Successful deletion!')
-        },
-        error: error => console.log(error)
-      });
+      next: response => {
+        console.log('Successful deletion!');
+        location.reload();
+      },
+      error: error => console.log(error)
+    });
   }
 }

@@ -87,16 +87,19 @@ export class UploadComponent implements OnInit, CanComponentDeactivate {
     var copies = this.genForm.controls['copies'].value;
     var questions = this.genForm.controls['questions'].value;
 
-    this.examService.executeExamFile(this.selectedFile, copies, questions).subscribe({
+    this.examService.executeExamFile(this.selectedFile, this.user!.userName, copies, questions).subscribe({
       next: (blob: Blob) => {
         this.generatedPdf = blob;
+        this.generateState = false;     // Generate process ended.
+        this.saveDownloadState = true;  // Save or Download process started.
       },
       error: error => {
-        console.log('Error executing DLL:', error);
+        this.generateState = false;     // Generate stopped.
+        this.selectState = true;        // Return to select state.
+        this.selectedFile = null;       // Empty the selected file.
+        this.processEnded();            // Start the process from the start.
       }
     });
-    this.generateState = false;     // Generate process ended.
-    this.saveDownloadState = true;  // Save or Download process started.
   }
 
   // Downloads the stored PDF Blob

@@ -1,1 +1,45 @@
-<p>admin works!</p>
+<div class="container" style="padding-top: 120px;">
+    <h3 class="dashboard-title" style="padding-bottom: 30px;">Admin Dashboard</h3>
+    <div class="users-container">
+        <ng-container *ngIf="haveUsers">
+            <ng-container *ngFor="let member of members">
+                <div class="user-card" *ngIf="!member.role.includes('Admin')">
+                    <div class="user-info">
+                        <h4>{{member.firstName}} {{member.lastName}}<br>({{member.role}})</h4>
+                        <ng-container *ngIf="member.role.includes('Student')">
+                            <div class="exam-item">
+                                <p class="info-text">Students don't have exam instances!</p>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="member.role.includes('Professor')">
+                            <ng-container *ngIf="member.exams">
+                                <h3>Exam List:</h3>
+                                <div *ngFor="let exam of member.exams" class="exam-item">
+                                    <p><strong>Exam Name:</strong> {{exam.examName}}<p>
+                                    <button mat-raised-button class="action-button"
+                                            (click)="deleteUserExam(member.userName, exam.examName)">
+                                        <i class="fa-solid fa-trash-can"></i> Delete Exam
+                                    </button>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="member.exams.length == 0">
+                                <div class="exam-item">
+                                    <p class="info-text">Professor has not submitted any exams to the platform!</p>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+                    <div class="user-delete-container">
+                        <button mat-raised-button class="action-button delete-exam-button"
+                                (click)="deleteUser(member.userName)">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                </div>
+            </ng-container>
+        </ng-container>
+        <ng-container *ngIf="members.length <= 1">
+            <h3 class="no-users-text">There are no registered users!</h3>
+        </ng-container>
+    </div>
+</div>

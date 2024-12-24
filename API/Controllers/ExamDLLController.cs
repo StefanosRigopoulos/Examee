@@ -3,6 +3,7 @@ using API.Errors;
 using API.Helpers;
 using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
@@ -27,12 +28,17 @@ namespace API.Controllers {
         }
 
         [HttpPost("execute_exam_file/")]
-        public async Task<IActionResult> ExecuteExamFile([FromForm] IFormFile file, [FromForm] string copies, [FromForm] string questions)
+        public async Task<IActionResult> ExecuteExamFile([FromForm] IFormFile file, [FromForm] string username, [FromForm] string copies, [FromForm] string questions)
         {
             if (file == null || file.Length == 0) return BadRequest(new ApiException(400, "Invalid file.", "Please upload a valid DLL."));
             if (!int.TryParse(copies, out int copiesNum) || copiesNum <= 0) return BadRequest(new ApiException(400, "Invalid number of copies.", "Please provide a positive integer."));
             if (!int.TryParse(questions, out int questionsNum) || questionsNum <= 0) return BadRequest(new ApiException(400, "Invalid number of questions.", "Please provide a positive integer."));
             
+            // Check if the exam already exists.
+            var fileName = file.FileName.Replace(".dll", "");
+            var exam = await _uow.ExamRepository.GetExamAsync(username, fileName);
+            if (exam != null) return BadRequest(new ApiException(400, "Exam already exists."));
+
             // Create a temporary directory
             string tempDir = Path.Combine(Path.GetTempPath(), "DllProcessing_" + Guid.NewGuid());
             Directory.CreateDirectory(tempDir);
@@ -93,7 +99,10 @@ namespace API.Controllers {
                 // Clean up temporary files
                 try
                 {
-                    if (Directory.Exists(tempDir)) Directory.Delete(tempDir, true);
+                    if (Directory.Exists(tempDir))
+                    {
+                        Directory.Delete(tempDir, true);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -175,7 +184,10 @@ namespace API.Controllers {
                 // Clean up temporary files
                 try
                 {
-                    if (Directory.Exists(tempDir)) Directory.Delete(tempDir, true);
+                    if (Directory.Exists(tempDir))
+                    {
+                        Directory.Delete(tempDir, true);
+                    }
                 }
                 catch (Exception ex)
                 {
