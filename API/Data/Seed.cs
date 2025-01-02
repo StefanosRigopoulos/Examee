@@ -13,8 +13,6 @@ namespace API.Data
 
             var userData = await File.ReadAllTextAsync("Data/UserSeedData.json");
 
-            var options = new JsonSerializerOptions{PropertyNameCaseInsensitive = true};
-
             var users = JsonSerializer.Deserialize<List<AppUser>>(userData);
 
             var roles = new List<AppRole>
@@ -27,8 +25,8 @@ namespace API.Data
             foreach(var role in roles) {
                 await roleManager.CreateAsync(role);
             }
-            foreach (var user in users) {
-                user.UserName = user.UserName.ToLower();
+            foreach (var user in users!) {
+                user.UserName = user.UserName!.ToLower();
                 user.Created = DateTime.SpecifyKind(user.Created, DateTimeKind.Utc);
                 await userManager.CreateAsync(user, "Password1");
             }

@@ -6,12 +6,12 @@ namespace API.Entities
     public class Exam
     {
         public int Id { get; set; }
-        public string ExamName { get; set; }
-        public string PublicId { get; set; }
-        public string Url { get; set; }
+        public required string ExamName { get; set; }
+        public required string PublicId { get; set; }
+        public required string Url { get; set; }
 
         // Relationship
         public int AppUserId { get; set; }
-        public AppUser AppUser { get; set; }
+        public AppUser AppUser { get; set; } = null!;
     }
 }

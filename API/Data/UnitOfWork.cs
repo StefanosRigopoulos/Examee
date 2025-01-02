@@ -3,26 +3,18 @@ using AutoMapper;
 
 namespace API.Data
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork(DataContext context, IMapper mapper) : IUnitOfWork
     {
-        private readonly DataContext _context;
-        private readonly IMapper _mapper;
-        public UnitOfWork(DataContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
-
-        public IUserRepository UserRepository => new UserRepository(_context, _mapper);
-        public IExamRepository ExamRepository => new ExamRepository(_context, _mapper);
+        public IUserRepository UserRepository => new UserRepository(context, mapper);
+        public IExamRepository ExamRepository => new ExamRepository(context, mapper);
         
         public async Task<bool> Complete()
         {
-            return await _context.SaveChangesAsync() > 0;
+            return await context.SaveChangesAsync() > 0;
         }
         public bool HasChanges()
         {
-            return _context.ChangeTracker.HasChanges();
+            return context.ChangeTracker.HasChanges();
         }
     }
 }

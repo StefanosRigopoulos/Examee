@@ -20,16 +20,19 @@ namespace API.Extensions
                 .AddEntityFrameworkStores<DataContext>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
-                options.TokenValidationParameters = new TokenValidationParameters {
+                var tokenKey = config["TokenKey"] ?? throw new Exception("TokenKey not found");
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"])),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey)),
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
             });
-            services.AddAuthorization(opt => {
-                opt.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
-            });
+
+            services.AddAuthorizationBuilder()
+                    .AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+
             return services;
         }
     }

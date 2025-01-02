@@ -5,10 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
 {
-    public class DataContext : IdentityDbContext<AppUser, AppRole, int, IdentityUserClaim<int>, AppUserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
+    public class DataContext(DbContextOptions options) : IdentityDbContext<AppUser, AppRole, int, IdentityUserClaim<int>, AppUserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>(options)
     {
-        public DataContext(DbContextOptions options) : base(options) { }
-        public DbSet<Exam> Exams { get; set; }
+        public required DbSet<Exam> Exams { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

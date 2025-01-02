@@ -7,45 +7,38 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
 {
-    public class ExamRepository : IExamRepository
+    public class ExamRepository(DataContext context, IMapper mapper) : IExamRepository
     {
-        private readonly DataContext _context;
-        private readonly IMapper _mapper;
-        public ExamRepository(DataContext context, IMapper mapper)
-        {
-            _mapper = mapper;
-            _context = context;
-        }
         public void Update(Exam examDll)
         {
-            _context.Entry(examDll).State = EntityState.Modified;
+            context.Entry(examDll).State = EntityState.Modified;
         }
 
         public void Delete(Exam exam)
         {
-            _context.Remove(exam);
+            context.Remove(exam);
         }
 
         public async Task<IEnumerable<ExamDTO>> GetExamsAsync(string username)
         {
-            return await _context.Exams
+            return await context.Exams
                                  .Where(x => x.AppUser.UserName == username)
-                                 .ProjectTo<ExamDTO>(_mapper.ConfigurationProvider)
+                                 .ProjectTo<ExamDTO>(mapper.ConfigurationProvider)
                                  .ToListAsync();
         }
 
-        public async Task<Exam> GetExamEntityAsync(string username, string examname)
+        public async Task<Exam?> GetExamEntityAsync(string username, string examname)
         {
-            return await _context.Exams
+            return await context.Exams
                                  .Where(x => x.AppUser.UserName == username)
                                  .SingleOrDefaultAsync(x => x.ExamName == examname);
         }
 
-        public async Task<ExamDTO> GetExamAsync(string username, string examname)
+        public async Task<ExamDTO?> GetExamAsync(string username, string examname)
         {
-            return await _context.Exams
+            return await context.Exams
                                  .Where(x => (x.ExamName == examname) && (x.AppUser.UserName == username))
-                                 .ProjectTo<ExamDTO>(_mapper.ConfigurationProvider)
+                                 .ProjectTo<ExamDTO>(mapper.ConfigurationProvider)
                                  .FirstOrDefaultAsync();
         }
     }

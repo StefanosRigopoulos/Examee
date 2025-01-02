@@ -8,7 +8,7 @@ namespace API.Interfaces
         void Update(Exam examDll);
         public void Delete(Exam exam);
         Task<IEnumerable<ExamDTO>> GetExamsAsync(string username);
-        Task<Exam> GetExamEntityAsync(string username, string examname);
-        Task<ExamDTO> GetExamAsync(string username, string examname);
+        Task<Exam?> GetExamEntityAsync(string username, string examname);
+        Task<ExamDTO?> GetExamAsync(string username, string examname);
     }
 }

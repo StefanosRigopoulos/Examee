@@ -4,12 +4,12 @@ namespace API.Entities
 {
     public class AppUser : IdentityUser<int>
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Role { get; set; }
-        public ICollection<AppUserRole> UserRoles { get; set; }
+        public required string FirstName { get; set; }
+        public required string LastName { get; set; }
+        public required string Role { get; set; }
+        public ICollection<AppUserRole> UserRoles { get; set; } = [];
         public DateTime Created { get; set; } = DateTime.UtcNow;
-        public string PhotoURL { get; set; }
+        public required string PhotoURL { get; set; }
         public List<Exam> Exams { get; set;} = new ();
     }
 }

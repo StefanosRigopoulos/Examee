@@ -7,25 +7,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API
 {
-    public class Startup
+    public class Startup(IConfiguration config)
     {
-        private readonly IConfiguration _config;
-        public Startup(IConfiguration config)
-        {
-            _config = config;
-        }
-
         // This method gets called by the runtime. Use this method to add services to the container. (Dependency Injection Container)
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-            services.AddApplicationServices();
-            services.AddIdentityServices(_config);
-            
-            services.AddDbContext<DataContext>(opt =>
-            {
-                opt.UseSqlServer(_config.GetConnectionString("DefaultConnection"));
-            });
+            services.AddApplicationServices(config);
+            services.AddIdentityServices(config);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,7 +52,7 @@ namespace API
                 await Seed.SeedUsers(userManager, roleManager);
             } catch (Exception error) {
                 var logger = services.GetService<ILogger<AppUser>>();
-                logger.LogError(error, "An error occurred during migration");
+                logger!.LogError(error, "An error occurred during migration");
             }
         }
     }

@@ -7,12 +7,12 @@ using Microsoft.Extensions.Options;
 namespace API.Services {
     public class CloudinaryService : ICloudinaryService
     {
-        private readonly Cloudinary _cloudinary;
+        private readonly Cloudinary cloudinary;
         public CloudinaryService(IOptions<CloudinarySettings> config)
         {
             var acc = new Account(config.Value.CloudName, config.Value.ApiKey, config.Value.ApiSecret);
 
-            _cloudinary = new Cloudinary(acc);
+            cloudinary = new Cloudinary(acc);
         }
 
         public string GetDownloadURL()
@@ -33,7 +33,7 @@ namespace API.Services {
                 Folder = "examee/Uploaded_DLLs/"
             };
 
-            return await _cloudinary.UploadAsync(uploadParams);
+            return await cloudinary.UploadAsync(uploadParams);
         }
 
         public async Task<DeletionResult> DeleteExamFileAsync(string publicId)
@@ -42,7 +42,7 @@ namespace API.Services {
             {
                 ResourceType = ResourceType.Raw
             };
-            return await _cloudinary.DestroyAsync(deleteParams);
+            return await cloudinary.DestroyAsync(deleteParams);
         }
     }
 }

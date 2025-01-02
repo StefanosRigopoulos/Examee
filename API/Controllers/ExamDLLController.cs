@@ -1,29 +1,20 @@
 using API.DTOs;
-using API.Errors;
 using API.Helpers;
 using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 
 namespace API.Controllers {
-    public class ExamDLLController : BaseAPIController
+    public class ExamDLLController(ICloudinaryService cloudinaryService, IUnitOfWork uow) : BaseAPIController
     {
-        private readonly ICloudinaryService _cloudinaryService;
-        private readonly IUnitOfWork _uow;
-        private readonly string _builderToolUrl = "https://res.cloudinary.com/duovczxpz/raw/upload/v1733071091/examee/BuilderTool.dll";
-        public ExamDLLController(ICloudinaryService cloudinaryService, IUnitOfWork uow)
-        {
-            _cloudinaryService = cloudinaryService;
-            _uow = uow;
-        }
+        private readonly string builderToolUrl = "https://res.cloudinary.com/duovczxpz/raw/upload/v1733071091/examee/BuilderTool.dll";
         
         [HttpGet("{username}/")]
         public async Task<ActionResult<IEnumerable<ExamDTO>>> GetUserExams(string username)
         {
-            var exams = await _uow.ExamRepository.GetExamsAsync(username);
+            var exams = await uow.ExamRepository.GetExamsAsync(username);
             return Ok(exams);
         }
 
@@ -36,8 +27,8 @@ namespace API.Controllers {
             
             // Check if the exam already exists.
             var fileName = file.FileName.Replace(".dll", "");
-            var exam = await _uow.ExamRepository.GetExamAsync(username, fileName);
-            if (exam != null) return BadRequest(new ApiException(400, "Exam already exists."));
+            var exam = await uow.ExamRepository.GetExamAsync(username, fileName);
+            if (exam != null) return BadRequest(new ApiException(400, "Bad Request", "Exam already exists."));
 
             // Create a temporary directory
             string tempDir = Path.Combine(Path.GetTempPath(), "DllProcessing_" + Guid.NewGuid());
@@ -46,7 +37,7 @@ namespace API.Controllers {
             string primaryDllPath = Path.Combine(tempDir, file.FileName);
             string dependencyDllPath = Path.Combine(tempDir, "BuilderTool.dll");
 
-            CustomAssemblyLoadContext loadContext = null;
+            CustomAssemblyLoadContext loadContext = null!;
             try {
                 // Save the uploaded primary DLL
                 using (var stream = new FileStream(primaryDllPath, FileMode.Create))
@@ -57,7 +48,7 @@ namespace API.Controllers {
                 // Download the dependency DLL from Cloudinary
                 using (var httpClient = new HttpClient())
                 {
-                    var dependencyData = await httpClient.GetByteArrayAsync(_builderToolUrl);
+                    var dependencyData = await httpClient.GetByteArrayAsync(builderToolUrl);
                     await System.IO.File.WriteAllBytesAsync(dependencyDllPath, dependencyData);
                 }
 
@@ -77,7 +68,7 @@ namespace API.Controllers {
                 
                 // Execute the method.
                 var instance = Activator.CreateInstance(type);
-                var result = method.Invoke(instance, new object[] { copiesNum, questionsNum });
+                var result = method?.Invoke(instance, new object[] { copiesNum, questionsNum });
 
                 // Generate a PDF using QuestPDF and return file as a response.
                 if (result is string generatedContent)
@@ -85,7 +76,7 @@ namespace API.Controllers {
                     var pdfBytes = GeneratePdfWithQuestPDF(generatedContent);
                     return File(pdfBytes, "application/pdf", "Exam.pdf");
                 }
-                else return BadRequest(new ApiException(500, "Unexpected result type from the method."));
+                else return BadRequest(new ApiException(500, "Unexpected result type from the method.", null));
             }
             finally
             {
@@ -117,11 +108,11 @@ namespace API.Controllers {
             if (!int.TryParse(questions, out int questionsNum) || questionsNum <= 0) return BadRequest(new ApiException(400, "Invalid number of questions.", "Please provide a positive integer."));
             
             // Get user and exam
-            var user = await _uow.UserRepository.GetUserByUsernameAsync(username);
-            if (user == null) return NotFound(new ApiException(404, "User not found!"));
+            var user = await uow.UserRepository.GetUserByUsernameAsync(username);
+            if (user == null) return NotFound(new ApiException(404, "User not found", null));
 
-            var exam = await _uow.ExamRepository.GetExamEntityAsync(username, examname);
-            if (exam == null) return NotFound(new ApiException(404, "Exam not found!"));
+            var exam = await uow.ExamRepository.GetExamEntityAsync(username, examname);
+            if (exam == null) return NotFound(new ApiException(404, "Exam not found", null));
 
             // Create a temporary directory
             string tempDir = Path.Combine(Path.GetTempPath(), "DllProcessing_" + Guid.NewGuid());
@@ -129,7 +120,7 @@ namespace API.Controllers {
             string primaryDllPath = Path.Combine(tempDir, exam.ExamName + ".dll");
             string dependencyDllPath = Path.Combine(tempDir, "BuilderTool.dll");
 
-            CustomAssemblyLoadContext loadContext = null;
+            CustomAssemblyLoadContext loadContext = null!;
             try {
 
                 // Download the exam DLL from Cloudinary
@@ -142,7 +133,7 @@ namespace API.Controllers {
                 // Download the dependency DLL from Cloudinary
                 using (var httpClient = new HttpClient())
                 {
-                    var dependencyData = await httpClient.GetByteArrayAsync(_builderToolUrl);
+                    var dependencyData = await httpClient.GetByteArrayAsync(builderToolUrl);
                     await System.IO.File.WriteAllBytesAsync(dependencyDllPath, dependencyData);
                 }
 
@@ -162,7 +153,7 @@ namespace API.Controllers {
                 
                 // Execute the method.
                 var instance = Activator.CreateInstance(type);
-                var result = method.Invoke(instance, new object[] { copiesNum, questionsNum });
+                var result = method?.Invoke(instance, new object[] { copiesNum, questionsNum });
 
                 // Generate a PDF using QuestPDF and return file as a response.
                 if (result is string generatedContent)
@@ -170,7 +161,7 @@ namespace API.Controllers {
                     var pdfBytes = GeneratePdfWithQuestPDF(generatedContent);
                     return File(pdfBytes, "application/pdf", "Exam.pdf");
                 }
-                else return BadRequest(new ApiException(500, "Unexpected result type from the method."));
+                else return BadRequest(new ApiException(500, "Unexpected result type from the method.", null));
             }
             finally
             {
@@ -199,23 +190,23 @@ namespace API.Controllers {
         [HttpPost("delete_exam_file/")]
         public async Task<IActionResult> DeleteExamFile([FromForm] string username, [FromForm] string examname) {
             // Get user and exam
-            var user = await _uow.UserRepository.GetUserByUsernameAsync(username);
-            if (user == null) return NotFound(new ApiException(404, "User not found!"));
+            var user = await uow.UserRepository.GetUserByUsernameAsync(username);
+            if (user == null) return NotFound(new ApiException(404, "User not found", null));
 
-            var exam = await _uow.ExamRepository.GetExamEntityAsync(username, examname);
-            if (exam == null) return NotFound(new ApiException(404, "Exam not found!"));
+            var exam = await uow.ExamRepository.GetExamEntityAsync(username, examname);
+            if (exam == null) return NotFound(new ApiException(404, "Exam not found", null));
 
             if (exam.PublicId != null)
             {
-                var result = await _cloudinaryService.DeleteExamFileAsync(exam.PublicId);
-                if (result.Error != null) return BadRequest(new ApiException(400, result.Error.Message));
+                var result = await cloudinaryService.DeleteExamFileAsync(exam.PublicId);
+                if (result.Error != null) return BadRequest(new ApiException(400, "Deletion Error", result.Error.Message));
             }
 
             user.Exams.Remove(exam);
-            _uow.ExamRepository.Delete(exam);
+            uow.ExamRepository.Delete(exam);
 
-            if (await _uow.Complete()) return Ok();
-            return BadRequest(new ApiException(400, "Problem deleting exam file!"));
+            if (await uow.Complete()) return Ok();
+            return BadRequest(new ApiException(400, "Bad Request", "Problem deleting exam file!"));
         }
 
         private byte[] GeneratePdfWithQuestPDF(string content)
