@@ -24,7 +24,7 @@ namespace API
             
             services.AddDbContext<DataContext>(opt =>
             {
-                opt.UseNpgsql(_config.GetConnectionString("DefaultConnection"));
+                opt.UseSqlServer(_config.GetConnectionString("DefaultConnection"));
             });
         }
 
@@ -50,6 +50,7 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
 
             // Temp seed data
