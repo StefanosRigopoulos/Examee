@@ -1,14 +1,19 @@
 import { Component, Input } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Exam } from 'src/app/_essentials/models/exam';
 import { Member } from 'src/app/_essentials/models/member';
 import { ExamService } from 'src/app/_essentials/services/exam.service';
+import { MatButtonModule } from '@angular/material/button';
+import { TextInputComponent } from '../../_essentials/forms/text-input/text-input.component';
+import { NgIf } from '@angular/common';
 
 @Component({
-  selector: 'app-member-exam-item',
-  templateUrl: './member-exam-item.component.html',
-  styleUrls: ['./member-exam-item.component.css']
+    selector: 'app-member-exam-item',
+    templateUrl: './member-exam-item.component.html',
+    styleUrls: ['./member-exam-item.component.css'],
+    standalone: true,
+    imports: [NgIf, FormsModule, ReactiveFormsModule, TextInputComponent, MatButtonModule]
 })
 export class MemberExamItemComponent {
   @Input() exam: Exam | undefined;

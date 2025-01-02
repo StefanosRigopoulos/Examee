@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-server-error',
-  templateUrl: './server-error.component.html',
-  styleUrls: ['./server-error.component.css']
+    selector: 'app-server-error',
+    templateUrl: './server-error.component.html',
+    styleUrls: ['./server-error.component.css'],
+    standalone: true,
+    imports: [MatButtonModule, RouterLink, RouterLinkActive]
 })
 export class ServerErrorComponent implements OnInit {
   error: any;

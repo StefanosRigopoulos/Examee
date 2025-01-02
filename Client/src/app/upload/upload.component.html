@@ -1,5 +1,5 @@
 <div class="container">
-    <div *ngIf="(accountService.currentUser$ | async)">
+    <div *ngIf="user">
         <div *appHasRole="['Professor']">
             <ng-container *ngIf="selectState">      <!-- Select -->
                 <div class="upload-area"
@@ -95,7 +95,7 @@
             </div>
         </div>
     </div>
-    <div *ngIf="!(accountService.currentUser$ | async)">
+    <div *ngIf="!user">
         <div class="upload-area" style="color:darkslategray;">
             <h3>In order to use our platform you<br>have to create an account.</h3>
             <div class="justify-content-center">

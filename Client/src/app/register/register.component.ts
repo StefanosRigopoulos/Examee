@@ -1,13 +1,16 @@
 import { Component, OnInit, } from '@angular/core';
 import { Router } from '@angular/router';
-import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AccountService } from '../_essentials/services/account.service';
 import { Lists } from '../_essentials/Lists';
+import { TextInputComponent } from '../_essentials/forms/text-input/text-input.component';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+    selector: 'app-register',
+    templateUrl: './register.component.html',
+    styleUrls: ['./register.component.css'],
+    standalone: true,
+    imports: [FormsModule, ReactiveFormsModule, TextInputComponent]
 })
 
 export class RegisterComponent implements OnInit {

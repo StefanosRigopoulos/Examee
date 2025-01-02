@@ -1,28 +1,22 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { AccountService } from './account.service';
-import { map, of, take } from 'rxjs';
+import { map, of } from 'rxjs';
 import { Member } from '../models/member';
-import { User } from '../models/user';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MemberService {
+  private http = inject(HttpClient);
+  private accountService = inject(AccountService);
+
   baseUrl = environment.apiUrl;
   members: Member[] = [];
-  user: User | undefined;
+  user = this.accountService.currentUser();
 
-  constructor(private http: HttpClient, private accountService: AccountService) {
-    this.accountService.currentUser$.pipe(take(1)).subscribe({
-      next: user => {
-        if (user) {
-          this.user = user;
-        }
-      }
-    });
-  }
+  constructor() {}
 
   getMember(username: string) {
     const member = this.members.find(x => x.userName === username);

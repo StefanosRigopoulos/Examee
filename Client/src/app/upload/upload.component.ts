@@ -1,19 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FileService } from '../_essentials/services/file.service';
 import { AccountService } from '../_essentials/services/account.service';
-import { Router } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CanComponentDeactivate } from '../_essentials/guards/prevent-exit.guard';
-import { Observable, take } from 'rxjs';
-import { User } from '../_essentials/models/user';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ExamService } from '../_essentials/services/exam.service';
+import { TextInputComponent } from '../_essentials/forms/text-input/text-input.component';
+import { MatButtonModule } from '@angular/material/button';
+import { HasRoleDirective } from '../_essentials/directives/has-role.directive';
+import { NgIf, AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-upload',
-  templateUrl: './upload.component.html',
-  styleUrls: ['./upload.component.css']
+    selector: 'app-upload',
+    templateUrl: './upload.component.html',
+    styleUrls: ['./upload.component.css'],
+    standalone: true,
+    imports: [NgIf, HasRoleDirective, MatButtonModule, FormsModule, ReactiveFormsModule, TextInputComponent, RouterLink, RouterLinkActive]
 })
 export class UploadComponent implements OnInit, CanComponentDeactivate {
+  private accountService = inject(AccountService);
+  
   process: boolean = false;
   selectState: boolean = true;
   generateState: boolean = false;
@@ -26,19 +33,9 @@ export class UploadComponent implements OnInit, CanComponentDeactivate {
   genForm: FormGroup = new FormGroup({});
 
   progress: number = 0;
-  user?: User;
+  user = this.accountService.currentUser();
   
-  constructor(public accountService: AccountService,
-              private fileService: FileService,
-              private examService: ExamService,
-              private router: Router,
-              private fb: FormBuilder) {
-    this.accountService.currentUser$.pipe(take(1)).subscribe({
-      next: user => {
-        if (user) this.user = user;
-      }
-    })
-  }
+  constructor(private fileService: FileService, private examService: ExamService, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.initializeForm();

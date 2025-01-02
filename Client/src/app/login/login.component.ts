@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AccountService } from '../_essentials/services/account.service';
 import { Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { TextInputComponent } from '../_essentials/forms/text-input/text-input.component';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css'],
+    standalone: true,
+    imports: [FormsModule, ReactiveFormsModule, TextInputComponent, MatButtonModule]
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup = new FormGroup({});

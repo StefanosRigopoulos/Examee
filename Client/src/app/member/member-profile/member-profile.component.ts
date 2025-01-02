@@ -1,29 +1,27 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Observable, take } from 'rxjs';
+import { Component, inject, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { Exam } from 'src/app/_essentials/models/exam';
 import { Member } from 'src/app/_essentials/models/member';
-import { User } from 'src/app/_essentials/models/user';
 import { AccountService } from 'src/app/_essentials/services/account.service';
 import { MemberService } from 'src/app/_essentials/services/member.service';
+import { MemberExamItemComponent } from '../member-exam-item/member-exam-item.component';
+import { NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-member-profile',
-  templateUrl: './member-profile.component.html',
-  styleUrls: ['./member-profile.component.css']
+    selector: 'app-member-profile',
+    templateUrl: './member-profile.component.html',
+    styleUrls: ['./member-profile.component.css'],
+    standalone: true,
+    imports: [NgFor, MemberExamItemComponent, RouterLink]
 })
 export class MemberProfileComponent implements OnInit {
+  private accountService = inject(AccountService);
+  
   member: Member = {} as Member;
   exams: Exam[] = [] as Exam[];
-  user?: User;
+  user = this.accountService.currentUser();
 
-  constructor(private accountService: AccountService, private memberService: MemberService, private router: ActivatedRoute) {
-    this.accountService.currentUser$.pipe(take(1)).subscribe({
-      next: user => {
-        if (user) this.user = user;
-      }
-    })
-  }
+  constructor(private memberService: MemberService) {}
 
   ngOnInit(): void {
     this.loadMember();

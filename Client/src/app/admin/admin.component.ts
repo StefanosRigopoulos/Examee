@@ -2,11 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { MemberService } from '../_essentials/services/member.service';
 import { Member } from '../_essentials/models/member';
 import { AdminService } from '../_essentials/services/admin.service';
+import { MatButtonModule } from '@angular/material/button';
+import { NgIf, NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-admin',
-  templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.css']
+    selector: 'app-admin',
+    templateUrl: './admin.component.html',
+    styleUrls: ['./admin.component.css'],
+    standalone: true,
+    imports: [NgIf, NgFor, MatButtonModule]
 })
 export class AdminComponent implements OnInit {
   haveUsers: boolean = false;
