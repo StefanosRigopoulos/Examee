@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../_essentials/services/account.service';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { HasRoleDirective } from '../_essentials/directives/has-role.directive';
-import { NgIf, AsyncPipe } from '@angular/common';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'app-navbar',

@@ -1,15 +1,9 @@
 import { Injectable } from '@angular/core';
-import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor,
-  HttpErrorResponse
-} from '@angular/common/http';
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 import { catchError, Observable } from 'rxjs';
 import { NavigationExtras, Router } from '@angular/router';
-import { ErrorModalComponent } from '../errors/error-modal/error-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ErrorModalComponent } from '../errors/error-modal/error-modal.component';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {

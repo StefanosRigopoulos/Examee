@@ -9,7 +9,7 @@ import { ExamService } from '../_essentials/services/exam.service';
 import { TextInputComponent } from '../_essentials/forms/text-input/text-input.component';
 import { MatButtonModule } from '@angular/material/button';
 import { HasRoleDirective } from '../_essentials/directives/has-role.directive';
-import { NgIf, AsyncPipe } from '@angular/common';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'app-upload',
