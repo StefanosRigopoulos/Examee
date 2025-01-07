@@ -19,15 +19,18 @@ jobs:
       - name: Set up node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Install Angular CLI
         run: npm install -g @angular/cli@18
 
+      - name: Clear npm cache
+        run: npm cache clean --force
+
       - name: Install deps and build angular app
         run: |
           cd Client
-          npm install
+          npm install --legacy-peer-deps
           ng build
 
       - name: Set up .NET Core
