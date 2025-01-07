@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FileService } from '../_essentials/services/file.service';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
@@ -9,16 +9,18 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     standalone: true,
     imports: [RouterLink, RouterLinkActive]
 })
-export class HomeComponent {
-  dllUrl: string | null = null;
-  documentationUrl: string | null = null;
+export class HomeComponent implements OnInit {
+  exameeToolURL: string | null = null;
+  documentationURL: string | null = null;
 
-  constructor(private fileService: FileService) {
-    this.fileService.getFileDllURL().subscribe((url) => {
-      this.dllUrl = url;
+  constructor(private fileService: FileService) { }
+
+  ngOnInit(): void {
+    this.fileService.getExameeToolURL().subscribe((url) => {
+      this.exameeToolURL = url;
     });
-    this.fileService.getDocumentationPDFURL().subscribe((url) => {
-      this.documentationUrl = url;
+    this.fileService.getDocumentationURL().subscribe((url) => {
+      this.documentationURL = url;
     });
   }
 }

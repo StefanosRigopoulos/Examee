@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from './_essentials/models/user';
-import { AccountService } from './_essentials/services/account.service';
-import { FooterComponent } from './footer/footer.component';
 import { RouterOutlet } from '@angular/router';
-import { NavBarComponent } from './navbar/navbar.component';
 import { NgxSpinnerComponent } from 'ngx-spinner';
+import { NavBarComponent } from './navbar/navbar.component';
+import { FooterComponent } from './footer/footer.component';
+import { AccountService } from './_essentials/services/account.service';
+import { User } from './_essentials/models/user';
 
 @Component({
     selector: 'app-root',

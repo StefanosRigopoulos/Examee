@@ -10,12 +10,12 @@ export class FileService {
   
   constructor(private http: HttpClient) {}
 
-  getFileDllURL() {
-    return this.http.get(this.baseUrl + "file/get-dll", { responseType: 'text' });
+  getExameeToolURL() {
+    return this.http.get(this.baseUrl + "file/get-examee-tool", { responseType: 'text' });
   }
 
-  getDocumentationPDFURL() {
-    return this.http.get(this.baseUrl + "file/get-documentation-pdf", { responseType: 'text' });
+  getDocumentationURL() {
+    return this.http.get(this.baseUrl + "file/get-documentation", { responseType: 'text' });
   }
 
   uploadDll(file: File, username: string) {

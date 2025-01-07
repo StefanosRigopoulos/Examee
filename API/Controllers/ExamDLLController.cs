@@ -9,7 +9,7 @@ using QuestPDF.Infrastructure;
 namespace API.Controllers {
     public class ExamDLLController(ICloudinaryService cloudinaryService, IUnitOfWork uow) : BaseAPIController
     {
-        private readonly string builderToolUrl = "https://res.cloudinary.com/duovczxpz/raw/upload/v1733071091/examee/BuilderTool.dll";
+        private readonly string builderToolUrl = "https://res.cloudinary.com/duovczxpz/raw/upload/v1736247127/examee/ExameeTool.dll";
         
         [HttpGet("{username}/")]
         public async Task<ActionResult<IEnumerable<ExamDTO>>> GetUserExams(string username)

@@ -5,18 +5,18 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers {
     public class FileController(ICloudinaryService cloudinaryService, IUnitOfWork uow) : BaseAPIController
     {
-        [HttpGet("get-dll")]
+        [HttpGet("get-examee-tool")]
         public IActionResult GetDownloadUrl()
         {
-            var url = cloudinaryService.GetDownloadURL();
+            var url = cloudinaryService.GetExameeToolURL();
             if (string.IsNullOrEmpty(url)) return NotFound(new ApiException(404, "DLL not found", null));
             return Ok(url);
         }
 
-        [HttpGet("get-documentation-pdf")]
+        [HttpGet("get-documentation")]
         public IActionResult GetDocumentationPDFUrl()
         {
-            var url = cloudinaryService.GetDocumentationPDFUrl();
+            var url = cloudinaryService.GetDocumentationURL();
             if (string.IsNullOrEmpty(url)) return NotFound(new ApiException(404, "PDF not found", null));
             return Ok(url);
         }
