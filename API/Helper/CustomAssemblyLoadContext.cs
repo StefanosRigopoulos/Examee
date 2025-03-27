@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Runtime.Loader;
+
 namespace API.Helpers
 {
     public class CustomAssemblyLoadContext : AssemblyLoadContext
@@ -8,6 +9,16 @@ namespace API.Helpers
         public CustomAssemblyLoadContext(string dependencyPath) : base(isCollectible: true)
         {
             _dependencyPath = dependencyPath;
+            Resolving += ResolveDependency;
+        }
+        private Assembly ResolveDependency(AssemblyLoadContext context, AssemblyName assemblyName)
+        {
+            string dependencyDllPath = Path.Combine(_dependencyPath, assemblyName.Name + ".dll");
+            if (File.Exists(dependencyDllPath))
+            {
+                return LoadFromAssemblyPath(dependencyDllPath);
+            }
+            return null!;
         }
         protected override Assembly Load(AssemblyName assemblyName)
         {

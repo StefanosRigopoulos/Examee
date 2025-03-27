@@ -30,8 +30,7 @@ export class MemberExamItemComponent {
   
   initializeForm() {
     this.genForm = this.fb.group({
-      copies: ['', [Validators.required, Validators.pattern('^(?:[1-9][0-9]?|[1-4][0-9]{2}|500)$')]],
-      questions: ['', [Validators.required, Validators.pattern('^(?:[1-9]|10)$')]]
+      copies: ['', [Validators.required, Validators.pattern('^(?:[1-9][0-9]?|[1-4][0-9]{2}|500)$')]]
     });
   }
 
@@ -41,11 +40,8 @@ export class MemberExamItemComponent {
 
   generateExams() {
     this.process = true;
-
     var copies = this.genForm.controls['copies'].value;
-    var questions = this.genForm.controls['questions'].value;
-
-    this.examService.executeExam(this.member!.userName, this.exam!.examName, copies, questions).subscribe({
+    this.examService.executeExam(this.member!.userName, this.exam!.examName, copies).subscribe({
       next: (blob: Blob) => {
         this.generatedPdf = blob;
       },
@@ -57,11 +53,9 @@ export class MemberExamItemComponent {
     if (this.generatedPdf) {
       const link = document.createElement('a');
       const url = window.URL.createObjectURL(this.generatedPdf);
-
       link.download = this.exam!.examName + '.pdf';
       link.href = url;
       link.click();
-
       window.URL.revokeObjectURL(url);
     } else {
       alert('No PDF available for download. Please generate it first.');

@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers {
     public class FileController(ICloudinaryService cloudinaryService, IUnitOfWork uow) : BaseAPIController
     {
-        [HttpGet("get-examee-tool")]
+        [HttpGet("get-examee-renderer")]
         public IActionResult GetDownloadUrl()
         {
-            var url = cloudinaryService.GetExameeToolURL();
+            var url = cloudinaryService.GetExameeRendererURL();
             if (string.IsNullOrEmpty(url)) return NotFound(new ApiException(404, "DLL not found", null));
             return Ok(url);
         }

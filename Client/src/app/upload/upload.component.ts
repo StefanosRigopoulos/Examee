@@ -43,8 +43,7 @@ export class UploadComponent implements OnInit, CanComponentDeactivate {
   
   initializeForm() {
     this.genForm = this.fb.group({
-      copies: ['', [Validators.required, Validators.pattern('^(?:[1-9][0-9]?|[1-4][0-9]{2}|500)$')]],
-      questions: ['', [Validators.required, Validators.pattern('^(?:[1-9]|10)$')]]
+      copies: ['', [Validators.required, Validators.pattern('^(?:[1-9][0-9]?|[1-4][0-9]{2}|500)$')]]
     });
   }
   
@@ -82,9 +81,8 @@ export class UploadComponent implements OnInit, CanComponentDeactivate {
     if (!this.selectedFile) return;
 
     var copies = this.genForm.controls['copies'].value;
-    var questions = this.genForm.controls['questions'].value;
 
-    this.examService.executeExamFile(this.selectedFile, this.user!.userName, copies, questions).subscribe({
+    this.examService.executeExamFile(this.selectedFile, this.user!.userName, copies).subscribe({
       next: (blob: Blob) => {
         this.generatedPdf = blob;
         this.generateState = false;     // Generate process ended.

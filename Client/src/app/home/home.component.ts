@@ -10,14 +10,14 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     imports: [RouterLink, RouterLinkActive]
 })
 export class HomeComponent implements OnInit {
-  exameeToolURL: string | null = null;
+  exameeRendererURL: string | null = null;
   documentationURL: string | null = null;
 
   constructor(private fileService: FileService) { }
 
   ngOnInit(): void {
-    this.fileService.getExameeToolURL().subscribe((url) => {
-      this.exameeToolURL = url;
+    this.fileService.getExameeRendererURL().subscribe((url) => {
+      this.exameeRendererURL = url;
     });
     this.fileService.getDocumentationURL().subscribe((url) => {
       this.documentationURL = url;

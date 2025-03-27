@@ -19,13 +19,8 @@
                         <p>File selected: {{ selectedFile.name }}</p>
                         <form [formGroup]="genForm" id="msform" autocomplete="off">
                             <div class="row justify-content-center" style="padding-left: 15px; padding-right: 15px;">
-                                <div class="col-4">
-                                    <label for="copies" class="form-label">Copies</label>
+                                <div class="col-6">
                                     <app-text-input [formControl]="$any(genForm.controls['copies'])" [label]="'Copies'" [type]="'text'"></app-text-input>
-                                </div>
-                                <div class="col-4">
-                                    <label for="questions" class="form-label">Questions</label>
-                                    <app-text-input [formControl]="$any(genForm.controls['questions'])" [label]="'Questions'" [type]="'text'"></app-text-input>
                                 </div>
                             </div>
                             <button mat-raised-button style="background-color: rgb(255, 209, 145);" [disabled]="!genForm.valid" (click)="generateExams()">Generate Exams</button>

@@ -10,8 +10,8 @@ export class FileService {
   
   constructor(private http: HttpClient) {}
 
-  getExameeToolURL() {
-    return this.http.get(this.baseUrl + "file/get-examee-tool", { responseType: 'text' });
+  getExameeRendererURL() {
+    return this.http.get(this.baseUrl + "file/get-examee-renderer", { responseType: 'text' });
   }
 
   getDocumentationURL() {

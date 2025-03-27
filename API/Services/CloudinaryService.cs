@@ -15,14 +15,14 @@ namespace API.Services {
             cloudinary = new Cloudinary(acc);
         }
 
-        public string GetExameeToolURL()
+        public string GetExameeRendererURL()
         {
-            return "https://res.cloudinary.com/duovczxpz/raw/upload/v1736247127/examee/ExameeTool.dll";
+            return "https://res.cloudinary.com/duovczxpz/raw/upload/v1742891500/examee/ExameeRenderer.dll";
         }
         
         public string GetDocumentationURL()
         {
-            return "https://res.cloudinary.com/duovczxpz/image/upload/v1736253584/examee/Documentation.pdf";
+            return "https://res.cloudinary.com/duovczxpz/image/upload/v1741515864/examee/Documentation.pdf";
         }
         
         public async Task<RawUploadResult> UploadFileAsync(Stream fileStream, string fileName)
