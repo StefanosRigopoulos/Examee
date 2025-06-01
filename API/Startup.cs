@@ -27,34 +27,34 @@ namespace API
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseMiddleware<ExceptionMiddleware>();
-            // app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("https://localhost:4200"));
-            // app.UseCors(policy => policy
-            //     .AllowAnyHeader()
-            //     .AllowAnyMethod()
-            //     .AllowCredentials()
-            //     .WithOrigins(
-            //         "https://localhost:4200", 
-            //         "http://localhost:4200",
-            //         "https://examee.azurewebsites.net"
-            //     ));
+            app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("https://localhost:4200"));
             app.UseCors(policy => policy
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials()
-                .SetIsOriginAllowed(origin =>
-                {
-                    if (string.IsNullOrWhiteSpace(origin)) return false;
+                .WithOrigins(
+                    "https://localhost:4200", 
+                    "http://localhost:4200",
+                    "https://examee.azurewebsites.net"
+                ));
+            // app.UseCors(policy => policy
+            //     .AllowAnyHeader()
+            //     .AllowAnyMethod()
+            //     .AllowCredentials()
+            //     .SetIsOriginAllowed(origin =>
+            //     {
+            //         if (string.IsNullOrWhiteSpace(origin)) return false;
                     
-                    // Allow localhost for development
-                    if (origin.StartsWith("https://localhost:") || origin.StartsWith("http://localhost:"))
-                        return true;
+            //         // Allow localhost for development
+            //         if (origin.StartsWith("https://localhost:") || origin.StartsWith("http://localhost:"))
+            //             return true;
                         
-                    // Allow your Azure domain
-                    if (origin == "https://examee.azurewebsites.net")
-                        return true;
+            //         // Allow your Azure domain
+            //         if (origin == "https://examee.azurewebsites.net")
+            //             return true;
                         
-                    return false;
-                }));
+            //         return false;
+            //     }));
             app.UseAuthentication();
             app.UseAuthorization();
 
