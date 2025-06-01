@@ -7,3 +7,24 @@ services:
       MSSQL_SA_PASSWORD: "Password@1"
     ports:
       - "1433:1433"
+    networks:
+      - app-network
+
+  api:
+    build:
+      context: ./API  # Update this to your actual API folder name
+      dockerfile: Dockerfile
+    container_name: examee_api
+    ports:
+      - "5001:8080"  # Map host port 5000 to container port 8080
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sql_server,1433;Database=examee_db;User Id=SA;Password=Password@1;TrustServerCertificate=True
+    depends_on:
+      - sql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
